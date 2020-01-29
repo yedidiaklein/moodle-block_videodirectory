@@ -1,0 +1,18 @@
+.block_videodirectory_video{
+  background-color:#f5f5f5!important;
+  margin:8px !important;
+  width:280px !important;
+}
+.block_videodirectory_orig_filename{
+    margin-left: 5px !important;
+}
+.block_videodirectory_thumb{
+margin: 7px;
+}
+hr.style5 {
+	background-color: #fff;
+  border-top: 2px dashed #8c8b8b;
+}
+
+
+/* href="{{wwwroot}}/mod/videostream/view.php?id={{id}}" */
