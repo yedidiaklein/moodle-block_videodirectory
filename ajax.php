@@ -14,28 +14,34 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
- // original plugin by 2013 Jonas Nockert <jonasnockert@gmail.com>
-
-
 /**
- * Defines the version of videostream.
- *
- * This code fragment is called by moodle_needs_upgrading() and
- * /admin/index.php.
+ * Process ajax requests
  *
  * @package    block_videodirectory
  * @copyright  2020 Tovi Kurztag <tovi@openapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+if (!defined('AJAX_SCRIPT')) {
+    define('AJAX_SCRIPT', true);
+}
+require(__DIR__.'/../../config.php');
 
-defined('MOODLE_INTERNAL') || die();
+global $DB;
+$contextid = required_param('contextid', PARAM_INT);
+$videoid = required_param('videoid', PARAM_INT);
+$action = optional_param('action', '', PARAM_ALPHA);
+$sesskey = optional_param('sesskey', false, PARAM_TEXT);
+require_sesskey();
 
-$plugin->component = 'block_videodirectory';  // Recommended since 2.0.2 (MDL-26035). Required since 3.0 (MDL-48494)
-$plugin->version = 2020012909;  // YYYYMMDDHH (year, month, day, 24-hr time)
-$plugin->requires = 2016052300; // YYYYMMDDHH (This is the release version for Moodle 2.0)
-$plugin->dependencies = array(
-    'local_video_directory' => ANY_VERSION,
-    'mod_videostream' => ANY_VERSION
-);
+$return = false;
 
+$event = \block_videodirectory\event\video_view::create(array(
+        'objectid' => $videoid,
+       'contextid' => $contextid,
+       'other' => $action
+    ));
+$event->trigger();
+$return = 1;
+echo json_encode($return);
+die;

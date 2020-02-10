@@ -1,8 +1,11 @@
+<div class="block_videodirectory_videos">
 {{#videos}}
 <div  class="block_videodirectory_video">
-<img  class="block_videodirectory_thumb border border-primary" src="{{wwwroot}}/local/video_directory/thumb.php?id={{id}}&mini=1">
-<a class="block_videodirectory_orig_filename" onclick="" >{{orig_filename}}</a>
+    <a href={{wwwroot}}/blocks/videodirectory/view.php?id={{id}}&courseid={{courseid}}>
+        <img  class="block_videodirectory_thumb border border-primary" src="{{wwwroot}}/local/video_directory/thumb.php?id={{id}}&mini=1">
+       <div>{{orig_filename}}</div>
+    </a>
 </div>
-{{! <hr class="style5"> }}
 {{/videos}}
+</div>
 

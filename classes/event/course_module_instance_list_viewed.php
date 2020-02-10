@@ -14,28 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
- // original plugin by 2013 Jonas Nockert <jonasnockert@gmail.com>
-
 
 /**
- * Defines the version of videostream.
- *
- * This code fragment is called by moodle_needs_upgrading() and
- * /admin/index.php.
+ * This class provides functionality for the videostream module.
  *
  * @package    block_videodirectory
  * @copyright  2020 Tovi Kurztag <tovi@openapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_videodirectory\event;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'block_videodirectory';  // Recommended since 2.0.2 (MDL-26035). Required since 3.0 (MDL-48494)
-$plugin->version = 2020012909;  // YYYYMMDDHH (year, month, day, 24-hr time)
-$plugin->requires = 2016052300; // YYYYMMDDHH (This is the release version for Moodle 2.0)
-$plugin->dependencies = array(
-    'local_video_directory' => ANY_VERSION,
-    'mod_videostream' => ANY_VERSION
-);
-
+class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
+}

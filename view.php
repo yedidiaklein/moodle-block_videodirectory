@@ -1,22 +1,70 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Prints a particular instance of videodirectory from block
+ *
+ * @package    block_videodirectory
+ * @copyright  2020 Tovi Kurztag <tovi@openapp.co.il>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+require_once(__DIR__ . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
+require_once( __DIR__ . '/../../mod/videostream/renderer.php');
+require_once(__DIR__ . '/../../mod/videostream/locallib.php');
 
 $id = required_param('id', PARAM_INT);
-
-// $cm = get_coursemodule_from_id('videostream', $id, 0, false, MUST_EXIST);
-// $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-// $context = context_module::instance($cm->id);
-// $videostream = new videostream($context, $cm, $course);
-
-// require_login($course, true, $cm);
-// require_capability('mod/videostream:view', $context);
-
-// $PAGE->set_pagelayout('incourse');
-
-$url = new moodle_url('/mod/videostream/view.php', array('videoid' => $id));
-$PAGE->set_url('/mod/videostream/view.php', array('videoid' =>$id));
+$courseid = required_param('courseid', PARAM_INT);
 
 
-//echo $renderer->video_page($videostream);
-//echo sesskey();
+global $DB, $OUTPUT, $PAGE, $CFG, $USER, $COURSE;
+// TODO
+// check that user belong to course
+
+$PAGE->set_context(context_system::instance());
+
+$sql1 = "SELECT id,fullname,shortname
+FROM mdl_course
+WHERE id=?";
+
+$sql = "SELECT c2.*
+from mdl_context c
+join mdl_block_instances bi on c.id=bi.parentcontextid
+join mdl_context c2 on c2.contextlevel=80 and c2.instanceid = bi.id
+and bi.blockname = 'videodirectory'";
+$context = $DB->get_record_sql($sql);
+
+$course = $DB->get_record_sql($sql1, [$courseid]);
+$videoname = $DB->get_field('local_video_directory', 'orig_filename', ['id' => $id]);
+$url = new moodle_url('/blocks/videodirectory/view.php', array('id' => $id, 'courseid' => $courseid));
+$PAGE->set_url($url);
+$PAGE->set_heading($course->fullname);
+$PAGE->set_title($course->shortname.': '.$videoname);
+require_login();
+
+$event = \block_videodirectory\event\video_view::create(array(
+    'objectid' => $id,
+    'contextid' => $context->id,
+    ));
+    $event->trigger();
+
+$output = '';
+$output .= video($id);
+echo $OUTPUT->header();
+echo $OUTPUT->heading($videoname);
+echo $output;
+echo $OUTPUT->footer();
