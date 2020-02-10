@@ -26,7 +26,7 @@ if (!defined('AJAX_SCRIPT')) {
     define('AJAX_SCRIPT', true);
 }
 require(__DIR__.'/../../config.php');
-
+require_login();
 global $DB;
 $contextid = required_param('contextid', PARAM_INT);
 $videoid = required_param('videoid', PARAM_INT);
@@ -37,7 +37,7 @@ require_sesskey();
 $return = false;
 
 $event = \block_videodirectory\event\video_view::create(array(
-        'objectid' => $videoid,
+       'objectid' => $videoid,
        'contextid' => $contextid,
        'other' => $action
     ));

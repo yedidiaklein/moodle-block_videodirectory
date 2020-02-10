@@ -24,45 +24,38 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$id = required_param('id', PARAM_INT);
-
-function video($id) {
-    // $output .= mod_videostream_renderer->output->container_start($vclass);
+function video($id , $courseid) {
     $output = "<div class='videostream'>";
-    // Open video tag.
-    $vclass = 'videostream';
-    // $output .= $output->container_start($vclass);
-
     $config = get_config('videostream');
 
     if (($config->streaming == "symlink") || ($config->streaming == "php")) {
-        $output .= get_video_source_elements_videojs($config->streaming, $id);
+        $output .= get_video_source_elements_videojs($config->streaming, $id, $courseid);
 
     } else if ($config->streaming == "hls") {
         // Elements for video sources. (here we get the hls video).
-        $output .= get_video_source_elements_hls($id);
+        $output .= get_video_source_elements_hls($id, $courseid);
     } else {
         // Dash video.
-        $output .= get_video_source_elements_dash($id);
+        $output .= get_video_source_elements_dash($id, $courseid);
     }
-
     // Close video tag.
     $output .= html_writer::end_tag('video');
     $output .= get_bookmark_controls($id);
     // Close videostream div.
-    //$output .= container_end();
+    $output .= "</div>";
     return $output;
 }
 
-function video_events($id) {
+function video_events($id, $courseid) {
     global $CFG, $DB;
+    // $sql = "SELECT c2.*
+    // from mdl_context c
+    // join mdl_block_instances bi on c.id=bi.parentcontextid
+    // join mdl_context c2 on c2.contextlevel=80 and c2.instanceid = bi.id
+    // and bi.blockname = 'videodirectory'";
+    // $context1 = $DB->get_record_sql($sql, null, $strictness = IGNORE_MULTIPLE);
 
-    $sql = "SELECT c2.*
-    from mdl_context c
-    join mdl_block_instances bi on c.id=bi.parentcontextid
-    join mdl_context c2 on c2.contextlevel=80 and c2.instanceid = bi.id
-    and bi.blockname = 'videodirectory'";
-    $context = $DB->get_record_sql($sql, null, $strictness = IGNORE_MULTIPLE);
+    $context = context_course::instance($courseid);
     $sesskey = sesskey();
     $jsmediaevent = "<script language='JavaScript'>
         var v = document.getElementsByTagName('video')[0];
@@ -90,7 +83,6 @@ function video_events($id) {
     return $jsmediaevent;
 }
 
-
 function get_bookmark_controls($videoid) {
     global $DB, $USER, $OUTPUT;
     $output = '';
@@ -104,10 +96,7 @@ function get_bookmark_controls($videoid) {
     return $output;
 }
 
-
-
-
-function get_video_source_elements_dash($id) {
+function get_video_source_elements_dash($id, $courseid) {
         global $CFG;
         $width = '800px';
         $height = '500px';
@@ -131,14 +120,13 @@ function get_video_source_elements_dash($id) {
         $output .= '\', type: \'application/dash+xml\'});
                             player.play();
                         </script>';
-        $output .= video_events($videostream);
+        $output .= video_events($id, $courseid);
         return $output;
-    }
+}
 
 
 
-function get_video_source_elements_hls($videostream)
-{
+function get_video_source_elements_hls($id, $courseid) {
     global $CFG, $OUTPUT;
     $width = '800px';
     $height = '500px';
@@ -148,14 +136,11 @@ function get_video_source_elements_hls($videostream)
         'hlsstream' => createhls($id),
         'wwwroot' => $CFG->wwwroot);
     $output = $OUTPUT->render_from_template("block_videodirectory/hls", $data);
-    $output .= video_events($videostream);
+    $output .= video_events($id, $courseid);
     return $output;
 }
 
-
-
-
-function get_video_source_elements_videojs($type, $id) {
+function get_video_source_elements_videojs($type, $id, $courseid) {
     global $CFG;
     $width = '800px';
     $height = '500px';
@@ -181,8 +166,7 @@ function get_video_source_elements_videojs($type, $id) {
     $output .= '\', type: \'video/mp4\'});
                         player.play();
                     </script>';
-     $output .= video_events($id);
-
+     $output .= video_events($id, $courseid);
     return $output;
 }
 

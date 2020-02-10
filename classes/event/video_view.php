@@ -39,7 +39,7 @@ defined('MOODLE_INTERNAL') || die();
 class video_view extends \core\event\base {
     protected function init() {
         global $COURSE;
-        $this->data['crud'] = 'r'; // c(reate), r(ead), u(pdate), d(elete)
+        $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'local_video_directory';
     }
@@ -51,11 +51,13 @@ class video_view extends \core\event\base {
         if ($this->other != "") {
             return "The user with id {$USER->id} Did this action : <b>{$this->other}</b> on video id {$this->objectid}.";
         } else {
-            return "The user with id {$USER->id} viewed video id {$this->objectid}.";
+            $id = $_SESSION['videoid'];
+            return "The user with id {$USER->id} viewed video id {$id}.";
         }
     }
     public function get_url() {
-        return new \moodle_url('/blocks/videodirectory/view.php', array('id' => $this->objectid , 'courseid' => $this->courseid));
+        $id = $_SESSION['videoid'];
+        return new \moodle_url('/blocks/videodirectory/view.php', array('id' => $id , 'courseid' => $this->courseid));
     }
     public function get_legacy_logdata() {
         // Override if you are migrating an add_to_log() call.

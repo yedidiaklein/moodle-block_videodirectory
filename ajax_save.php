@@ -23,7 +23,7 @@
  */
 define('AJAX_SCRIPT', true);
 require(__DIR__ . '/../../config.php');
-
+require_login();
 if (!isloggedin() || isguestuser()) {
      print_error('No permissions');
 }
