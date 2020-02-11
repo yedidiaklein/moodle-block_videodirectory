@@ -25,62 +25,16 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'שילוב סרטון';
-$string['modulenameplural'] = 'סרטונים';
-$string['modulename_help'] = 'רכיב זה מאפשר שילוב של סרטונים ממאגר הסרטים בתוך קורס';
 
 $string['videodirectory:addinstance'] = 'הוספת סרטון';
 $string['videodirectory:view'] = 'צפייה בסרטון';
 
-$string['pluginadministration'] = 'ניהול רכיב הצגת סרטונים';
-
 $string['pluginname'] = 'מדריך וידאו';
 $string['videodirectory'] = 'מדריך וידאו';
-
-$string['videostream_defaults_heading'] = 'ברירות מחדל להגדרות של הסרטון';
-$string['videostream_defaults_text'] = 'ההגדרות שיוגדרו פה תהיינה ברירות המחדל בסרטון חדש ';
-$string['width_explain'] = 'הגדירו את ברירת המחדל של הרוחב';
-$string['height_explain'] = 'הגדירו את ברירת המחדל של הגובה';
-$string['responsive_explain'] = 'האם רספונסיביות מוגדרת כברירת מחדל';
-$string['limitdimensions_explain'] = 'האם גובה ורוחב יוגדרו כמקסימום במצב רספונסיבי';
-$string['inline'] = 'הצג בעמוד הראשי של הקורס?';
-$string['inline_help'] = 'הצג בעמוד הראשי של הקורס?';
-
-$string['filearea_captions'] = 'כתוביות';
-$string['filearea_posters'] = 'תמונה';
-$string['filearea_videos'] = 'סרטונים';
-
-$string['video_fieldset'] = 'סרטון';
-
-$string['width'] = 'רוחב';
-$string['width_help'] = 'הזינו כאן את רוחב הסרטון (למשל 800 עבור רוחב של 800 פיקסלים).';
-$string['height'] = 'גובה';
-$string['height_help'] = 'הזינו כאן את גובה הסרטון (למשל 500 עבור גובה של 500 פיקסלים).';
-$string['responsive'] = 'רספונסיבי?';
-$string['responsive_help'] = "סמנו פה כדי שהסרט יסתדר אוטומטית על בסיס רוחב הדפדפן";
-$string['responsive_label'] = '';
-$string['limitdimensions'] = 'הגבלת גודל במצב רספונסיבי?';
 
 $string['video'] = 'סרטון';
 $string['videos'] = 'סרטונים';
 $string['captions'] = 'כתוביות';
-
-$string['err_positive'] = 'חובה להכניס כאן מספר חיובי';
-
-
-$string['eventvideo_view'] = 'סרטון נצפה';
-$string['eventvideo_seek'] = 'סרטון דולג';
-$string['playback_rate'] = "מהירות הסרטון";
-
-$string['streaming_protocol'] = "שיטת הזרמה";
-
-$string['dash_base_url'] = "Dash נתיב";
-$string['dash_base_url_explain'] = "הכנס נתיב Dash, למשל http://streaming.company.com/dash/";
-
-$string['hls_base_url'] = "HLS נתיב";
-$string['hls_base_url_explain'] = "הכנס נתיב HLS, למשל http://streaming.company.com/hls/";
-
-$string['nginx_multi'] = "מחזרוזת לסיום MultiURI ב-NGINX";
-$string['nginx_multi_explain'] = "מחרוזת עבור NGINX multi URI, ידוע כ- vod_multi_uri_suffix בקובץ nginx conf";
 
 $string['addsmartbookmark'] = 'הוסף סימניה חכמה';
 $string['time'] = 'זמן';

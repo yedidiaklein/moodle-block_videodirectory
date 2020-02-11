@@ -38,7 +38,6 @@ defined('MOODLE_INTERNAL') || die();
  **/
 class video_view extends \core\event\base {
     protected function init() {
-        global $COURSE;
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'local_video_directory';
