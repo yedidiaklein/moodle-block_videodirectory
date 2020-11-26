@@ -185,7 +185,7 @@ function get_video_source_elements_videojs($type, $id, $courseid) {
     return $output;
 }
 
-function block_videodirecotry_createsymlink($videoid) {
+function block_videodirectory_createsymlink($videoid) {
     global $DB;
     $filename = $DB->get_field('local_video_directory', 'filename', [ 'id' => $videoid ]);
     if (substr($filename, -4) != '.mp4') {
