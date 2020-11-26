@@ -57,6 +57,10 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php?id='.$courseid));
 $PAGE->navbar->add($videoname);
+
+$PAGE->requires->css('/blocks/videodirectory/videojs-seek-buttons/videojs-seek-buttons.css');
+
+
 require_login();
 
 $_SESSION['videoid'] = $id;

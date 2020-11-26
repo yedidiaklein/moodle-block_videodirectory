@@ -23,6 +23,9 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once( __DIR__ . '/../../config.php');
+//require_once('/var/www/sites/video.openapp.co.il/dev/local/video_directory/localib.php');‏
+require_once($CFG->dirroot . '/local/video_directory/locallib.php');
 
 function video($id , $courseid) {
     $output = "<div class='videostream'>";
@@ -40,20 +43,52 @@ function video($id , $courseid) {
     }
     // Close video tag.
     $output .= html_writer::end_tag('video');
-    $output .= get_bookmark_controls($id);
     // Close videostream div.
     $output .= "</div>";
     return $output;
 }
 
+
+function block_videodirectory_createHLS($videoid) {
+    global $DB;
+
+    $config = get_config('videostream');
+
+
+    $id = $videoid;
+    $streams = $DB->get_records("local_video_directory_multi",array("video_id" => $id));
+    if ($streams) {
+        foreach ($streams as $stream) {
+                $files[]=$stream->filename;
+        }
+        $hls_streaming = $config->hls_base_url;
+    } else {
+        $files[] = local_video_directory_get_filename($id);
+        $hls_streaming = $config->hlsingle_base_url;
+    }
+
+    $parts=array();
+    foreach ($files as $file) {
+            $parts[] = preg_split("/[_.]/", $file);
+    }
+
+    $hls_url = $hls_streaming . $parts[0][0];
+    if ($streams) {
+        $hls_url .= "_";
+
+        foreach ($parts as $key => $value) {
+            $hls_url .= "," . $value[1];
+        }
+    }
+    $hls_url .= "," . ".mp4".$config->nginx_multi."/master.m3u8";
+
+    return $hls_url;
+}
+
+
+
 function video_events($id, $courseid) {
     global $CFG, $DB;
-    // $sql = "SELECT c2.*
-    // from mdl_context c
-    // join mdl_block_instances bi on c.id=bi.parentcontextid
-    // join mdl_context c2 on c2.contextlevel=80 and c2.instanceid = bi.id
-    // and bi.blockname = 'videodirectory'";
-    // $context1 = $DB->get_record_sql($sql, null, $strictness = IGNORE_MULTIPLE);
 
     $context = context_course::instance($courseid);
     $sesskey = sesskey();
@@ -127,14 +162,11 @@ function get_video_source_elements_dash($id, $courseid) {
 
 
 function get_video_source_elements_hls($id, $courseid) {
-    global $CFG, $OUTPUT;
+    global $CFG, $OUTPUT, $PAGE;
     $width = '800px';
     $height = '500px';
-
-    $data = array('width' => $width,
-        'height' => $height,
-        'hlsstream' => createhls($id),
-        'wwwroot' => $CFG->wwwroot);
+    $hlsstream = block_videodirectory_createHLS($id);
+    $data = array('width' => $width, 'height' => $height, 'videostream' => $hlsstream, 'wwwroot' => $CFG->wwwroot, 'videoid' => $id, 'type' => 'application/x-mpegURL');
     $output = $OUTPUT->render_from_template("block_videodirectory/hls", $data);
     $output .= video_events($id, $courseid);
     return $output;
@@ -142,35 +174,19 @@ function get_video_source_elements_hls($id, $courseid) {
 
 function get_video_source_elements_videojs($type, $id, $courseid) {
     global $CFG;
+
     $width = '800px';
     $height = '500px';
 
-    $output = '<video id=videostream class="video-js vjs-default-skin" data-setup=\'{}\'
-                style="position: relative"'
-    . 'controls >
-                <track label="English" kind="subtitles" srclang="en"
-                src="' . $CFG->wwwroot . '/local/video_directory/subs.php?video_id=' .
-        $id . '" default>
-                </video>
-                    <script src="https://vjs.zencdn.net/6.6.3/video.js"></script>
-                <script>
-                    var player = videojs("videostream",{
-                        playbackRates: [0.5, 1, 1.5, 2, 3]
-                    });';
-    $output .= 'player.src({ src: \'';
     if ($type == "symlink") {
-        $output .= createsymlink($id);
+        $videolink = createsymlink($id);
     } else {
-        $output .= $CFG->wwwroot . '/local/video_directory/play.php?video_id=' . $id;
+        $videolink = $CFG->wwwroot . '/local/video_directory/play.php?video_id=' . $id;
     }
-    $output .= '\', type: \'video/mp4\'});
-                        player.play();
-                    </script>';
-     $output .= video_events($id, $courseid);
+
+    $data = array('width' => $width, 'height' => $height, 'videostream' => $videolink, 'wwwroot' => $CFG->wwwroot, 'videoid' => $id, 'type' => 'video/mp4');
+    $output = $OUTPUT->render_from_template("block_videodirectory/hls", $data);
+    $output .= video_events($id, $courseid);
     return $output;
 }
-
-
-
-
 
