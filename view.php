@@ -39,14 +39,6 @@ $sql1 = "SELECT id,fullname,shortname
 FROM mdl_course
 WHERE id=?";
 
-// $sql = "SELECT c2.*
-// from mdl_context c
-// join mdl_block_instances bi on c.id=bi.parentcontextid
-// join mdl_context c2 on c2.contextlevel=80 and c2.instanceid = bi.id
-// and bi.blockname = 'videodirectory'";
-// $context1 = $DB->get_record_sql($sql, null, $strictness = IGNORE_MULTIPLE);
-
-
 $course = $DB->get_record_sql($sql1, [$courseid]);
 $videoname = $DB->get_field('local_video_directory', 'orig_filename', ['id' => $id]);
 $url = new moodle_url('/blocks/videodirectory/view.php', array('id' => $id, 'courseid' => $courseid));
@@ -61,7 +53,7 @@ $PAGE->navbar->add($videoname);
 $PAGE->requires->css('/blocks/videodirectory/videojs-seek-buttons/videojs-seek-buttons.css');
 
 
-require_login();
+require_login($courseid);
 
 $_SESSION['videoid'] = $id;
 $context = context_course::instance($courseid);

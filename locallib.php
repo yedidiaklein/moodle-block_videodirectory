@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 require_once( __DIR__ . '/../../config.php');
-//require_once('/var/www/sites/video.openapp.co.il/dev/local/video_directory/localib.php');‏
+
 require_once($CFG->dirroot . '/local/video_directory/locallib.php');
 
 function video($id , $courseid) {
@@ -54,12 +54,11 @@ function block_videodirectory_createHLS($videoid) {
 
     $config = get_config('videostream');
 
-
     $id = $videoid;
-    $streams = $DB->get_records("local_video_directory_multi",array("video_id" => $id));
+    $streams = $DB->get_records("local_video_directory_multi", array("video_id" => $id));
     if ($streams) {
         foreach ($streams as $stream) {
-                $files[]=$stream->filename;
+                $files[] = $stream->filename;
         }
         $hls_streaming = $config->hls_base_url;
     } else {
@@ -173,7 +172,7 @@ function get_video_source_elements_hls($id, $courseid) {
 }
 
 function get_video_source_elements_videojs($type, $id, $courseid) {
-    global $CFG;
+    global $CFG, $OUTPUT;
 
     $width = '800px';
     $height = '500px';
