@@ -177,11 +177,7 @@ function get_video_source_elements_videojs($type, $id, $courseid) {
     $width = '800px';
     $height = '500px';
 
-    if ($type == "symlink") {
-        $videolink = createsymlink($id);
-    } else {
-        $videolink = $CFG->wwwroot . '/local/video_directory/play.php?video_id=' . $id;
-    }
+    $videolink = createsymlink($id);
 
     $data = array('width' => $width, 'height' => $height, 'videostream' => $videolink, 'wwwroot' => $CFG->wwwroot, 'videoid' => $id, 'type' => 'video/mp4');
     $output = $OUTPUT->render_from_template("block_videodirectory/hls", $data);
