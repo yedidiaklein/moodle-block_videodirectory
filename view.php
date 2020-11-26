@@ -30,30 +30,24 @@ require_once(__DIR__ . '/../../mod/videostream/locallib.php');
 $id = required_param('id', PARAM_INT);
 $courseid = required_param('courseid', PARAM_INT);
 
-global $DB, $OUTPUT, $PAGE, $CFG, $USER, $COURSE;
-// TODO
-// check that user belong to course
-
+require_login($courseid);
 
 $sql1 = "SELECT id,fullname,shortname
-FROM mdl_course
-WHERE id=?";
+            FROM mdl_course
+            WHERE id=?";
 
 $course = $DB->get_record_sql($sql1, [$courseid]);
 $videoname = $DB->get_field('local_video_directory', 'orig_filename', ['id' => $id]);
 $url = new moodle_url('/blocks/videodirectory/view.php', array('id' => $id, 'courseid' => $courseid));
 $PAGE->set_url($url);
 $PAGE->set_heading($course->fullname);
-$PAGE->set_title($course->shortname.': '.$videoname);
+$PAGE->set_title($course->shortname . ': ' . $videoname);
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('standard');
 $PAGE->navbar->add($course->fullname, new moodle_url('/course/view.php?id='.$courseid));
 $PAGE->navbar->add($videoname);
 
 $PAGE->requires->css('/blocks/videodirectory/videojs-seek-buttons/videojs-seek-buttons.css');
-
-
-require_login($courseid);
 
 $_SESSION['videoid'] = $id;
 $context = context_course::instance($courseid);

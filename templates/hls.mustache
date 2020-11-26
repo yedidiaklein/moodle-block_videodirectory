@@ -7,6 +7,7 @@
     height="360"
     data-setup='{ "playbackRates": [0.5, 1, 1.5, 2] }'
     poster='{{wwwroot}}/local/video_directory/thumb.php?id={{videoid}}'
+    onContextMenu="return false;"
   >
     <source src="{{videostream}}" type="{{type}}"/>
     <p class="vjs-no-js">
@@ -47,7 +48,7 @@
 /*    (function(window, videojs) {
     var player = window.player = videojs('myPlayer');
     player.Resume({
-      uuid: 'UNIQUE_VIDEO_IDENTIFIER',
+      uuid: 'block_videodirectory_{{videoid}}',
       playbackOffset: 5, // begin playing video this number of seconds before it otherwise would.
       title: 'Continue from last playback',
       resumeButtonText: 'Resume',
