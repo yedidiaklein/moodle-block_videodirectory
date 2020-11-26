@@ -66,7 +66,7 @@ function block_videodirectory_createHLS($videoid) {
         $hls_streaming = $config->hlsingle_base_url;
     }
 
-    $parts=array();
+    $parts = array();
     foreach ($files as $file) {
             $parts[] = preg_split("/[_.]/", $file);
     }
@@ -177,11 +177,21 @@ function get_video_source_elements_videojs($type, $id, $courseid) {
     $width = '800px';
     $height = '500px';
 
-    $videolink = createsymlink($id);
+    $videolink = block_videodirectory_createsymlink($id);
 
     $data = array('width' => $width, 'height' => $height, 'videostream' => $videolink, 'wwwroot' => $CFG->wwwroot, 'videoid' => $id, 'type' => 'video/mp4');
     $output = $OUTPUT->render_from_template("block_videodirectory/hls", $data);
     $output .= video_events($id, $courseid);
     return $output;
+}
+
+function block_videodirecotry_createsymlink($videoid) {
+    global $DB;
+    $filename = $DB->get_field('local_video_directory', 'filename', [ 'id' => $videoid ]);
+    if (substr($filename, -4) != '.mp4') {
+        $filename .= '.mp4';
+    }
+    $config = get_config('local_video_directory');
+    return $config->streaming . "/" . $filename;
 }
 
