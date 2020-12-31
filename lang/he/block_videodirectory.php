@@ -29,8 +29,8 @@ $string['modulename'] = 'שילוב סרטון';
 $string['videodirectory:addinstance'] = 'הוספת סרטון';
 $string['videodirectory:view'] = 'צפייה בסרטון';
 
-$string['pluginname'] = 'מדריך וידאו';
-$string['videodirectory'] = 'מדריך וידאו';
+$string['pluginname'] = 'סרטי זום';
+$string['videodirectory'] = 'סרטי זום';
 
 $string['video'] = 'סרטון';
 $string['videos'] = 'סרטונים';

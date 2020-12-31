@@ -23,8 +23,8 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-$string['pluginname'] = 'video directory';
-$string['videodirectory'] = 'video directory';
+$string['pluginname'] = 'Zoom videos';
+$string['videodirectory'] = 'Zoom videos';
 
 $string['modulename'] = 'videodirectory';
 
